@@ -11,6 +11,7 @@ import torch.utils.data
 import unlearn
 import utils
 from trainer import validate
+import json
 
 def main():
     args = arg_parser.parse_args()
@@ -185,6 +186,22 @@ def main():
         )
         unlearn.save_unlearn_checkpoint(model, evaluation_result, args)
 
+    jsonHeader = "test"
+    result_file = f"result{args.dataset}_{args.unlearn}_{args.unlearn_lr}_SALUN.json"
+    if args.num_indexes_to_replace is not None:
+        jsonHeader = f"Num indexes: {args.num_indexes_to_replace}"
+    else:
+        jsonHeader = f"Class {args.class_to_replace}"
+    
+    # Ensure the result file exists
+    if not os.path.exists(result_file):
+        with open(result_file, 'w') as f:
+            pass
+
+    with open(result_file, 'a') as f:
+        f.write(f"{jsonHeader}\n")
+        f.write(json.dumps(evaluation_result, indent=4))
+        f.write("\n")
     unlearn.save_unlearn_checkpoint(model, evaluation_result, args)
 
 

@@ -47,7 +47,7 @@ def save_gradient_ratio(data_loaders, model, criterion, args):
         for name in gradients:
             gradients[name] = torch.abs_(gradients[name])
 
-    threshold_list = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    threshold_list = [0.5]
 
     for i in threshold_list:
         sorted_dict_positions = {}
