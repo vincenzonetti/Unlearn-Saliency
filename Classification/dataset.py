@@ -9,6 +9,7 @@ import glob
 import os
 from shutil import move
 
+import json
 import numpy as np
 import torch
 from PIL import Image
@@ -16,6 +17,7 @@ from torch.utils.data import DataLoader, Dataset, Subset
 from torchvision import transforms
 from torchvision.datasets import CIFAR10, CIFAR100, SVHN, ImageFolder
 from tqdm import tqdm
+
 
 
 def cifar10_dataloaders_no_val(
@@ -539,6 +541,7 @@ def cifar10_dataloaders(
     shuffle=True,
     no_aug=False,
 ):
+    if(class_to_replace == -1): class_to_replace = None
     if no_aug:
         train_transform = transforms.Compose(
             [
@@ -559,7 +562,6 @@ def cifar10_dataloaders(
             transforms.ToTensor(),
         ]
     )
-
     print(
         "Dataset information: CIFAR-10\t 45000 images for training \t 5000 images for validation\t"
     )
@@ -594,7 +596,7 @@ def cifar10_dataloaders(
 
     if class_to_replace is not None and indexes_to_replace is not None:
         raise ValueError(
-            "Only one of `class_to_replace` and `indexes_to_replace` can be specified"
+            "Only one of `class_to_replace` and `indexes_to_replace` can be specified {}".format(class_to_replace)
         )
     if class_to_replace is not None:
         replace_class(
@@ -662,6 +664,7 @@ def replace_indexes(
             dataset._labels[indexes] = dataset._labels[new_indexes]
     else:
         # Notice the -1 to make class 0 work
+        
         try:
             dataset.targets[indexes] = -dataset.targets[indexes] - 1
         except:
@@ -702,6 +705,10 @@ def replace_class(
         rng = np.random.RandomState(seed)
         indexes = rng.choice(indexes, size=num_indexes_to_replace, replace=False)
         print(f"Replacing indexes {indexes}")
+        np_indexes = np.array(indexes).tolist()
+        with open('indexes_to_replace.json', 'w') as f:
+            json.dump(np_indexes, f)
+
     replace_indexes(dataset, indexes, seed, only_mark)
 
 

@@ -18,7 +18,12 @@ def save_gradient_ratio(data_loaders, model, criterion, args):
         momentum=args.momentum,
         weight_decay=args.weight_decay,
     )
-
+    device = ""
+    if torch.cuda.is_available():
+        torch.cuda.set_device(int(args.gpu))
+        device = torch.device(f"cuda:{int(args.gpu)}")
+    else:
+        device = torch.device("cpu")
     gradients = {}
 
     forget_loader = data_loaders["forget"]
@@ -28,8 +33,8 @@ def save_gradient_ratio(data_loaders, model, criterion, args):
         gradients[name] = 0
 
     for i, (image, target) in enumerate(forget_loader):
-        image = image.cuda()
-        target = target.cuda()
+        image = image.to(device)
+        target = target.to(device)
 
         # compute output
         output_clean = model(image)
@@ -78,9 +83,10 @@ def save_gradient_ratio(data_loaders, model, criterion, args):
             threshold_tensor = threshold_tensor.reshape(tensor.shape)
             hard_dict[key] = threshold_tensor
             start_index += num_elements
-
-        torch.save(hard_dict, os.path.join(args.save_dir, "with_{}.pt".format(i)))
-
+        if(args.class_to_replace != -1):
+            torch.save(hard_dict, os.path.join(args.save_dir, "{}_class{}_mask_{}.pt".format(args.dataset,args.class_to_replace,i)))
+        else:
+            torch.save(hard_dict, os.path.join(args.save_dir, "{}_amoung_forget{}_mask_{}.pt".format(args.dataset,args.num_indexes_to_replace,i)))
 
 def main():
     args = arg_parser.parse_args()
@@ -103,7 +109,7 @@ def main():
         test_loader,
         marked_loader,
     ) = utils.setup_model_dataset(args)
-    model.cuda()
+    model.to(device)
 
     def replace_loader_dataset(
         dataset, batch_size=args.batch_size, seed=1, shuffle=True

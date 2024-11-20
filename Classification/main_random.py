@@ -13,6 +13,30 @@ import utils
 from trainer import validate
 import json
 
+def transform_list(data):
+  """
+  Transforms a list of number and characters into a list of integers.
+
+  Args:
+    data: A list of single-digit numbers and characters, 
+          where numbers are separated by a comma and a space.
+
+  Returns:
+    A list of integers.
+  """
+  result = []
+  current_number = ""
+  for char in data:
+    if char.isdigit():  # Check if the character is a digit
+      current_number += char  # Add the digit to the current number string
+    elif char == ',' and current_number:  # Check for comma and existing number
+      result.append(int(current_number))  # Convert to integer and add to result
+      current_number = ""  # Reset for the next number
+  if current_number:  # Add the last number if any
+    result.append(int(current_number))
+  return result
+
+
 def main():
     args = arg_parser.parse_args()
 
@@ -26,6 +50,9 @@ def main():
     if args.seed:
         utils.setup_seed(args.seed)
     seed = args.seed
+    indexes  = transform_list(args.indexes_to_replace)
+    args.num_indexes_to_replace = len(indexes)
+    args.indexes_to_replace = indexes
     # prepare dataset
     (
         model,
@@ -34,7 +61,7 @@ def main():
         test_loader,
         marked_loader,
     ) = utils.setup_model_dataset(args)
-    model.cuda()
+    model.to(device)
 
     def replace_loader_dataset(
         dataset, batch_size=args.batch_size, seed=1, shuffle=True

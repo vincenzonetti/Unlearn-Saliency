@@ -19,10 +19,15 @@ def l1_regularization(model):
 
 @iterative_unlearn
 def GA(data_loaders, model, criterion, optimizer, epoch, args, mask=None):
+    device = None
+    if torch.cuda.is_available():  
+        device = torch.device(f"cuda:{int(args.gpu)}")
+    else:
+        device = torch.device("cpu")
+
     train_loader = data_loaders["forget"]
     losses = utils.AverageMeter()
     top1 = utils.AverageMeter()
-
     # switch to train mode
     model.train()
 
@@ -77,9 +82,9 @@ def GA(data_loaders, model, criterion, optimizer, epoch, args, mask=None):
                 utils.warmup_lr(
                     epoch, i + 1, optimizer, one_epoch_step=len(train_loader), args=args
                 )
-
-            image = image.cuda()
-            target = target.cuda()
+            
+            image = image.to(device)
+            target = target.to(device)
 
             # compute output
             output_clean = model(image)
@@ -137,7 +142,7 @@ def GA_l1(data_loaders, model, criterion, optimizer, epoch, args):
                 epoch, i + 1, optimizer, one_epoch_step=len(train_loader), args=args
             )
 
-        image = image.cuda()
+        image = image.to(device)
         target = target.cuda()
 
         # compute output
