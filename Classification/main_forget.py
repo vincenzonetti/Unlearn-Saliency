@@ -11,6 +11,7 @@ import torch.utils.data
 import unlearn
 import utils
 from trainer import validate
+import json
 
 def main():
     args = arg_parser.parse_args()
