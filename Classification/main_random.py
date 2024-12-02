@@ -45,7 +45,7 @@ def main():
         device = torch.device(f"cuda:{int(args.gpu)}")
     else:
         device = torch.device("cpu")
-
+        
     os.makedirs(args.save_dir, exist_ok=True)
     if args.seed:
         utils.setup_seed(args.seed)
@@ -159,7 +159,7 @@ def main():
             checkpoint = checkpoint["state_dict"]
 
         if args.mask_path:
-            mask = torch.load(args.mask_path)
+            mask = torch.load(args.mask_path,map_location=device)
 
         if args.unlearn != "retrain":
             model.load_state_dict(checkpoint, strict=False)

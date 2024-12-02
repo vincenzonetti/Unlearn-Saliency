@@ -1,0 +1,16 @@
+Num indexes: 4500
+{
+    "accuracy": {
+        "retain": 99.3283950617284,
+        "forget": 96.75555567762586,
+        "val": 97.21999987792968,
+        "test": 93.47
+    },
+    "SVC_MIA_forget_efficacy": {
+        "correctness": 0.0324444444444445,
+        "confidence": 0.13488888888888884,
+        "entropy": 0.1697777777777778,
+        "m_entropy": 0.346,
+        "prob": 0.11399999999999999
+    }
+}

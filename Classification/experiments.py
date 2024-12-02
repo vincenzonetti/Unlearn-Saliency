@@ -33,10 +33,10 @@ for amount in forgetting_data_amount:
     indexes = json.dumps(indexes)
     #command = f"python main_forget.py --unlearn GA --unlearn_epochs 10 --unlearn_lr 0.00013 --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace '{indexes}' --random_prune"
     #subprocess.run(command, shell=True, check=True)
-    command = f"python main_random.py --unlearn RL --unlearn_epochs 10 --unlearn_lr 0.0013 --num_indexes_to_replace {amount} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace '{indexes}' --random_prune --mask_path masks/cifar10_amount_forget{amount}_mask_0.5.pt"
+    command = f"python main_random.py --unlearn RL --unlearn_epochs 10 --unlearn_lr 0.13 --num_indexes_to_replace {amount} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace '{indexes}' --random_prune --mask_path masks/cifar10_amount_forget{amount}_mask_0.5.pt"
     subprocess.run(command, shell=True, check=True)
     
-    command = f"python main_forget.py --unlearn RL --unlearn_epochs 10 --unlearn_lr 0.0013 --num_indexes_to_replace {amount} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace '{indexes}' --random_prune"
+    command = f"python main_forget.py --unlearn RL --unlearn_epochs 10 --unlearn_lr 0.13 --num_indexes_to_replace {amount} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace '{indexes}' --random_prune"
     subprocess.run(command, shell=True, check=True)
     #command = f"python main_random.py --unlearn GA --unlearn_epochs 10 --unlearn_lr 0.00013 --num_indexes_to_replace {amount} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace '{indexes}' --random_prune --mask_path masks/cifar10_amount_forget{amount}_mask_0.5.pt"
     #subprocess.run(command, shell=True, check=True)

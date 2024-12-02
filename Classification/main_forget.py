@@ -64,7 +64,7 @@ def main():
         test_loader,
         marked_loader,
     ) = utils.setup_model_dataset(args)
-    model.to(device)
+    model.cuda()
     
     def replace_loader_dataset(
         dataset, batch_size=args.batch_size, seed=1, shuffle=True
