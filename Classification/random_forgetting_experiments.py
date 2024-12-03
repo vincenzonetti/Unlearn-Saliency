@@ -33,6 +33,7 @@ for amount in forgetting_data_amount:
     indexes = generate_random_indexes(n_samples=amount, max_val=45000, seed=int(amount/4500))
     command = f"python generate_mask.py --model_path {model_path} --save_dir {mask_path} --indexes_to_replace '{indexes}' --random_prune"
     for lr in [0.0001, 0.001, 0.01, 0.1]:
+        print(f"Learning rate: {lr}")
         command = f"python main_forget.py --unlearn GA --unlearn_epochs 10 --unlearn_lr {lr} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace '{indexes}' --random_prune"
         subprocess.run(command, shell=True, check=True)
         command = f"python main_random.py --unlearn RL --unlearn_epochs 10 --unlearn_lr {lr} --num_indexes_to_replace {amount} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace '{indexes}' --random_prune --mask_path masks/cifar10_amount_forget{amount}_mask_0.5.pt"
