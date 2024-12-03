@@ -8,7 +8,7 @@ mask_path = "masks"
 os.environ['MKL_THREADING_LAYER'] = 'GNU'
 json_file_path = 'indexes_to_replace42.json'
 tenXCifar10 = 4500
-forgetting_data_amount = [tenXCifar10, 2*tenXCifar10, 5*tenXCifar10]
+forgetting_data_amount = [2*tenXCifar10, 5*tenXCifar10]
 mask_path = "masks"
 
 
@@ -63,7 +63,6 @@ for amount in forgetting_data_amount:
         run_subprocess_safely(command)
         command = f"python main_random.py --unlearn RL --unlearn_epochs 10 --unlearn_lr {lr} --num_indexes_to_replace {amount} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace {indexes} --random_prune --mask_path masks/cifar10_amount_forget{amount}_mask_0.5.pt"
         run_subprocess_safely(command)
-
         command = f"python main_forget.py --unlearn RL --unlearn_epochs 10 --unlearn_lr {lr} --num_indexes_to_replace {amount} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace {indexes} --random_prune"
         run_subprocess_safely(command)
         command = f"python main_random.py --unlearn GA --unlearn_epochs 10 --unlearn_lr {lr} --num_indexes_to_replace {amount} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace {indexes} --random_prune --mask_path masks/cifar10_amount_forget{amount}_mask_0.5.pt"
