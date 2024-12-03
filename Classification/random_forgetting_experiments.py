@@ -8,7 +8,7 @@ mask_path = "masks"
 os.environ['MKL_THREADING_LAYER'] = 'GNU'
 json_file_path = 'indexes_to_replace42.json'
 tenXCifar10 = 4500
-forgetting_data_amount = [2*tenXCifar10, 5*tenXCifar10]
+forgetting_data_amount = [tenXCifar10,2*tenXCifar10, 5*tenXCifar10]
 mask_path = "masks"
 
 
