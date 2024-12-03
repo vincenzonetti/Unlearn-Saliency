@@ -125,7 +125,6 @@ def main():
     if args.seed:
         utils.setup_seed(args.seed)
     seed = args.seed
-    breakpoint()
     if(args.indexes_to_replace is not None):
         
         indexes  = transform_list(args.indexes_to_replace)
