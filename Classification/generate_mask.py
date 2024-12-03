@@ -110,7 +110,7 @@ def save_gradient_ratio(data_loaders, model, criterion, args):
         if(args.class_to_replace != -1):
             torch.save(hard_dict, os.path.join(args.save_dir, "{}_class{}_mask_{}.pt".format(args.dataset,args.class_to_replace,i)))
         else:
-            torch.save(hard_dict, os.path.join(args.save_dir, "{}_amoung_forget{}_mask_{}.pt".format(args.dataset,args.num_indexes_to_replace,i)))
+            torch.save(hard_dict, os.path.join(args.save_dir, "{}_amount_forget{}_mask_{}.pt".format(args.dataset,args.num_indexes_to_replace,i)))
 
 def main():
     args = arg_parser.parse_args()
@@ -233,7 +233,7 @@ def main():
         if "state_dict" in checkpoint.keys():
             checkpoint = checkpoint["state_dict"]
             model.load_state_dict(checkpoint, strict=False)
-
+    
     save_gradient_ratio(unlearn_data_loaders, model, criterion, args)
 
 
