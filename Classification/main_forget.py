@@ -53,7 +53,7 @@ def main():
     if args.seed:
         utils.setup_seed(args.seed)
     seed = args.seed
-    if(args.num_indexes_to_replace is not None):
+    if(args.indexes_to_replace is not None):
         indexes  = transform_list(args.indexes_to_replace)
         args.num_indexes_to_replace = len(indexes)
         args.indexes_to_replace = indexes
