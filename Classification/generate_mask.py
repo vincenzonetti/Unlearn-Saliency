@@ -114,7 +114,6 @@ def save_gradient_ratio(data_loaders, model, criterion, args):
 
 def main():
     args = arg_parser.parse_args()
-
     if torch.cuda.is_available():
         torch.cuda.set_device(int(args.gpu))
         device = torch.device(f"cuda:{int(args.gpu)}")
@@ -126,7 +125,7 @@ def main():
         utils.setup_seed(args.seed)
     seed = args.seed
     if(args.indexes_to_replace is not None):
-        
+
         indexes  = transform_list(args.indexes_to_replace)
         args.num_indexes_to_replace = len(indexes)
         args.indexes_to_replace = indexes

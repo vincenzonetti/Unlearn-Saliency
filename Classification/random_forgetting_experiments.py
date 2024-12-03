@@ -1,14 +1,16 @@
+import numpy as np
 import subprocess
-
+import shlex
+import os
 unlearn_path = "unlearned_models"
 model_path = "0model_SA_best.pth.tar"
 mask_path = "masks"
-
+os.environ['MKL_THREADING_LAYER'] = 'GNU'
 json_file_path = 'indexes_to_replace42.json'
 tenXCifar10 = 4500
 forgetting_data_amount = [tenXCifar10, 2*tenXCifar10, 5*tenXCifar10]
 mask_path = "masks"
-import numpy as np
+
 
 def generate_random_indexes(n_samples=4500, max_val=45000, seed=42):
     """
@@ -26,12 +28,15 @@ def generate_random_indexes(n_samples=4500, max_val=45000, seed=42):
     numbers = rng.choice(max_val, size=n_samples, replace=False)
     numbers = sorted(numbers.tolist())  # Convert to sorted list
     print(f"Are all numbers unique? {len(set(numbers)) == len(numbers)}")
+    return numbers
     
 
 
 for amount in forgetting_data_amount:
     indexes = generate_random_indexes(n_samples=amount, max_val=45000, seed=int(amount/4500))
-    command = f"python generate_mask.py --model_path {model_path} --save_dir {mask_path} --indexes_to_replace '{indexes}' --random_prune"
+    indexes = shlex.quote(str(indexes))
+    command = f"python generate_mask.py --model_path {model_path} --save_dir {mask_path} --indexes_to_replace {indexes} --random_prune"
+    subprocess.run(command, shell=True, check=True)
     for lr in [0.0001, 0.001, 0.01, 0.1]:
         print(f"Learning rate: {lr}")
         command = f"python main_forget.py --unlearn GA --unlearn_epochs 10 --unlearn_lr {lr} --model_path {model_path} --save_dir {unlearn_path} --indexes_to_replace '{indexes}' --random_prune"
