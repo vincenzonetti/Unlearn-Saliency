@@ -24,7 +24,7 @@ mask_path = "masks"
 
 for lr in [0.0001, 0.001, 0.01]:
     print(f"Learning rate: {lr}")
-    for i in range(0, 10):
+    for i in range(1, 10):
         print(f"Class: {i}")
         command = f"python main_forget.py --unlearn GA --unlearn_epochs 10 --unlearn_lr {lr} --class_to_replace {i} --model_path {model_path} --save_dir {unlearn_path} --mask_path masks/cifar10_class{i}_mask_0.5.pt --random_prune"
         subprocess.run(command, shell=True, check=True)
